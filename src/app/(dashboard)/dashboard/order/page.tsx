@@ -12,13 +12,13 @@ interface DataOrderRow {
   customer: string;
   address: string;
   status: string;
+  userId: string;
 }
 
 export default function OrderPage() {
   const { dataOrder } = useFetchOrder();
   const router = useRouter();
 
-  console.log('ini data order = ', dataOrder);
   const data = dataOrder
     ? dataOrder.map((item, index) => ({
         no: index + 1,
@@ -26,6 +26,7 @@ export default function OrderPage() {
         customer: item.user.name,
         address: item.address,
         status: item.status,
+        userId: item.userId,
       }))
     : [];
 
@@ -57,7 +58,7 @@ export default function OrderPage() {
       cell: (row) => (
         <div className='flex flex-col md:flex-row gap-2'>
           <button
-            onClick={() => router.push(`/dashboard/order/${row.id}`)}
+            onClick={() => router.push(`/dashboard/order/${row.userId}/${row.id}`)}
             className='rounded-lg bg-blue-500 px-4 py-2 text-xs font-medium text-white transition hover:bg-blue-600'
           >
             Detail Order

@@ -52,7 +52,7 @@ export interface Order {
   dateOrder: Date;
   status: OrderStatus;
   price: number;
-  OrderItem: OrderItem;
+  OrderItem: OrderItem[];
   user: User;
 }
 
@@ -62,7 +62,8 @@ export interface OrderItem {
   productId: string;
   quantity: number;
   subTotal: number;
-  product: Product[];
+  product: Product;
+  // product: Product[];
 }
 
 enum PaymentMethod {

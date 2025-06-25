@@ -3,12 +3,14 @@
 import { useParams } from 'next/navigation';
 import { PhoneIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import React from 'react';
+import useFetchUserOrder from '@/hooks/Order/useFetchUserOrder';
+import { formatPrice } from '@/helpers/helper';
 // import Image from 'next/image';
 
 export default function DetailOrderPage() {
   const params = useParams();
-  const { id } = params;
-  console.log('ID = ', id);
+  const { userId, orderId } = params;
+  const { dataUserOrder } = useFetchUserOrder({ userId: userId as string, orderId: orderId as string });
 
   return (
     <>
@@ -19,28 +21,27 @@ export default function DetailOrderPage() {
         <div className='w-3/4 flex flex-col gap-y-4'>
           <div className='bg-white p-4 rounded-lg'>
             <h3 className='text-lg text-black font-semibold mb-5'>Produk Pesanan</h3>
-            <div id='cardOrder' className='flex justify-between items-center'>
-              <div className='flex items-center gap-x-2'>
-                {/* <Image
-            src=""
-            width={100}
-            height={100}
-            alt="photo product"
-            className="size-16"
-          /> */}
-                <div className='bg-gray-500 size-12'></div>
-                <p className='text-black text-sm'>N-Qua Botol 1 Karton</p>
-              </div>
-              <div className=''>
-                <p className='text-sm font-medium text-black'>Rp45.000</p>
-              </div>
-              <div className=''>
-                <p className='text-sm font-medium text-black'>3</p>
-              </div>
-              <div className=''>
-                <p className='text-sm font-medium text-black'>Rp45.000</p>
-              </div>
-            </div>
+            {dataUserOrder?.OrderItem.map((item) => {
+              return (
+                // <div key={item.id} id='cardOrder' className='flex justify-between items-center'>
+                <div key={item.id} id='cardOrder' className='grid grid-cols-4 place-content-center space-y-1'>
+                  <div className='flex items-center gap-x-2'>
+                    {/* <Image src={item.product.photo} width={100} height={100} alt='photo product' className='size-16' /> */}
+                    <div className='bg-gray-500 size-12'></div>
+                    <p className='text-black flex-1 text-sm line-clamp-1'>{item.product.name}</p>
+                  </div>
+                  <div className='flex flex-col items-center justify-center text-center'>
+                    <p className='text-sm font-medium text-black'>{formatPrice(item.product.price)}</p>
+                  </div>
+                  <div className='flex flex-col items-center justify-center text-center'>
+                    <p className='text-sm font-medium text-black'>{item.quantity}</p>
+                  </div>
+                  <div className='flex flex-col items-center justify-center text-center'>
+                    <p className='text-sm font-medium text-black'>{formatPrice(item.subTotal)}</p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
           <div className='bg-white p-4 rounded-lg'>
             <h3 className='text-lg text-black font-semibold mb-5'>Payment Summary</h3>
@@ -102,7 +103,7 @@ export default function DetailOrderPage() {
           <h3 className='text-base text-black font-semibold'>Customer</h3>
           <div className='flex mt-2 gap-x-2 items-center'>
             <div className='size-8 rounded-full bg-gray-300'></div>
-            <p className='text-gray-400 text-sm'>Mahdy Mubasyir</p>
+            <p className='text-gray-400 text-sm'>{dataUserOrder?.user.name}</p>
           </div>
           <hr className='my-4' />
           {/* <div className='h-6'></div> */}
@@ -110,11 +111,11 @@ export default function DetailOrderPage() {
             <p className='text-base text-black font-semibold'>Contact info</p>
             <div className='flex items-center gap-x-2 mt-2'>
               <PhoneIcon className='size-4 text-yellow-500' />
-              <p className='text-gray-400 text-sm'>087774026818</p>
+              <p className='text-gray-400 text-sm'>{dataUserOrder?.user.phoneNumber}</p>
             </div>
             <div className='flex items-start mt-2 gap-x-2'>
               <MapPinIcon className='size-6 text-yellow-500' />
-              <p className='text-gray-400 text-sm'>Jl. Kemangsari 1 Gg.H.Wahab 1 no.36A, Jatibening, Bekasi</p>
+              <p className='text-gray-400 text-sm'>{dataUserOrder?.user.address}</p>
             </div>
           </div>
         </div>
