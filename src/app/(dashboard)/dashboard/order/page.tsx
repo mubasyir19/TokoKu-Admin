@@ -18,6 +18,7 @@ export default function OrderPage() {
   const { dataOrder } = useFetchOrder();
   const router = useRouter();
 
+  console.log('ini data order = ', dataOrder);
   const data = dataOrder
     ? dataOrder.map((item, index) => ({
         no: index + 1,
@@ -54,7 +55,7 @@ export default function OrderPage() {
     {
       name: 'Actions',
       cell: (row) => (
-        <div className='flex flex-col md:flex-row gap-2 overflow-x-auto'>
+        <div className='flex flex-col md:flex-row gap-2'>
           <button
             onClick={() => router.push(`/dashboard/order/${row.id}`)}
             className='rounded-lg bg-blue-500 px-4 py-2 text-xs font-medium text-white transition hover:bg-blue-600'

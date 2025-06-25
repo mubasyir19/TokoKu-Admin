@@ -1,6 +1,7 @@
 'use client';
 
 import { Order } from '@/data-types';
+import { getTokenCookies } from '@/helpers/helper';
 import { useEffect, useState } from 'react';
 
 export default function useFetchOrder() {
@@ -11,10 +12,13 @@ export default function useFetchOrder() {
   useEffect(() => {
     async function fetchDataOrder() {
       setLoading(true);
+      const jwtToken = getTokenCookies();
       try {
-        const fetchData = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BACKEND_TOKOKU}/order` // dynamic userId
-        );
+        const fetchData = await fetch(`${process.env.NEXT_PUBLIC_API_BACKEND_TOKOKU}/order`, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        });
         const response = await fetchData.json();
         console.log('ini semua order = ', response.data);
         setDataOrder(response.data);
